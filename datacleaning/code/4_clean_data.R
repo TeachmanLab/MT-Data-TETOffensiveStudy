@@ -32,7 +32,7 @@ wd_dir <- getwd()
 
 # Load custom functions
 
-source("./code/2_define_functions.R")
+source("./datacleaning/code/2_define_functions.R")
 
 # Check correct R version, load groundhog package, and specify groundhog_day
 
@@ -58,32 +58,33 @@ identify_columns <- function(df, grep_pattern) {
   }
 }
 
+
 # ---------------------------------------------------------------------------- #
 # Document data file names ----
 # ---------------------------------------------------------------------------- #
 
 # Obtain file names of raw and redacted CSV data files
 
-if (dir.exists(paste0(wd_dir, "/data/1_raw_full"))) {
-  raw_data_dir_full <- paste0(wd_dir, "/data/1_raw_full")
+if (dir.exists(paste0(wd_dir, "/datacleaning/data/1_raw"))) {
+  raw_data_dir_full <- paste0(wd_dir, "/datacleaning/data/1_raw")
   raw_full_filenames <- 
     list.files(raw_data_dir_full, pattern = "*.csv", full.names = FALSE)
 }
 
-if (dir.exists(paste0(wd_dir, "/data/1_raw_partial"))) {
+if (dir.exists(paste0(wd_dir, "/datacleaning/data/1_raw_partial"))) {
   raw_data_dir_partial <- paste0(wd_dir, "/data/1_raw_partial")
   raw_partial_filenames <- 
     list.files(raw_data_dir_partial, pattern = "*.csv", full.names = FALSE)
 }
 
-red_data_dir <- paste0(wd_dir, "/data/2_redacted")
+red_data_dir <- paste0(wd_dir, "/datacleaning//data/2_redacted")
 red_filenames <- list.files(red_data_dir, pattern = "*.csv", full.names = FALSE)
 
 # Output file names to TXT
 
-dir.create("./docs")
+dir.create("./datacleaning/docs")
 
-sink(file = "./docs/data_filenames.txt")
+sink(file = "./datacleaning/docs/data_filenames.txt")
 
 if (exists("raw_data_dir_full")) {
   cat("In './data/1_raw_full'", "\n")
@@ -201,7 +202,7 @@ system_tables <- c("export_log", "id_gen", "import_log", "password_token",
 
 # Remove tables
 
-dat <- dat[!(names(dat) %in% c(unused_tables, system_tables))]
+dat <- dat[!(names(dat) %in% c(unused_tables, system_tables))] # 51 tables left
 
 # ---------------------------------------------------------------------------- #
 # Rename "id" columns in "participant" and "study" tables ----
@@ -662,6 +663,14 @@ blank_date_ids <- unique(dat$js_psych_trial[dat$js_psych_trial$date == "" |
                                               dat$js_psych_trial$date_submitted == "", 
                                             "participant_id"])
 
+blank_date_ids <- blank_date_ids[-1]
+
+dat$js_psych_trial[dat$js_psych_trial$participant_id == blank_date_ids[1],] ## NA values 
+
+dat$js_psych_trial[dat$js_psych_trial$participant_id == blank_date_ids[1] &
+                     dat$js_psych_trial$session == "", 
+                   "session"] <- "preTest"
+
 for (i in 1:length(blank_date_ids)) {
   dat$js_psych_trial[dat$js_psych_trial$participant_id == blank_date_ids[i] &
                        dat$js_psych_trial$session == "", 
@@ -711,7 +720,7 @@ user_date_time_cols <- "return_date"
 # and times and add time zone
 
 recode_date_time_timezone <- function(dat) {
-  for (i in 1:length(dat)) {
+  for (i in 1:length(dat[[1]])) {
     table_name <- names(dat[i])
     colnames <- names(dat[[i]])
     target_colnames <- colnames[colnames %in% c(system_date_time_cols,
@@ -1107,6 +1116,7 @@ if (all(dat$study[dat$study$participant_id %in%
 
 study_name <- "Calm"
 
+study_names <- c("TET","GIDI")
 # ---------------------------------------------------------------------------- #
 # Define enrollment period and participant_ids ----
 # ---------------------------------------------------------------------------- #
@@ -1142,6 +1152,32 @@ get_enroll_dates <- function(study_name) {
   return(official_enroll_dates)
 }
 
+get_enroll_dates_for_two <- function(study_names) {
+  official_enroll_dates <- list()
+  
+  for (study_name in study_names) {
+    if (study_name == "Calm") {
+      official_enroll_open_date <-  as.POSIXct("2019-03-18 17:00:00", tz = "America/New_York")
+      official_enroll_close_date <- as.POSIXct("2020-04-06 23:59:00", tz = "America/New_York")
+    } else if (study_name == "TET") {
+      official_enroll_open_date <-  as.POSIXct("2020-04-07 00:00:00", tz = "America/New_York")
+      official_enroll_close_date <- NA
+    } else if (study_name == "GIDI") {
+      official_enroll_open_date <-  as.POSIXct("2020-07-10 13:00:00", tz = "America/New_York")
+      official_enroll_close_date <- as.POSIXct("2020-12-12 23:59:00", tz = "America/New_York")
+    }
+    
+    study_enroll_dates <- list(open = official_enroll_open_date,
+                               close = official_enroll_close_date)
+    
+    official_enroll_dates[[study_name]] <- study_enroll_dates
+  }
+  
+  return(official_enroll_dates)
+}
+
+get_enroll_dates_for_two(study_names)
+
 # Define function that gets participant_ids for desired study
 
 get_participant_ids <- function(dat, study_name) {
@@ -1154,6 +1190,27 @@ get_participant_ids <- function(dat, study_name) {
   }
   return(participant_ids)
 }
+
+get_participant_ids_for_two <- function(dat,study_names){
+  participant_ids <- list()
+  
+  for (study_name in study_names) {
+    if (study_name == "Calm") {
+      ids <- dat$study[dat$study$study_extension == "", "participant_id"]
+    } else if (study_name == "TET") {
+      ids <- dat$study[dat$study$study_extension == "TET", "participant_id"]
+    } else if (study_name == "GIDI") {
+      ids <- dat$study[dat$study$study_extension == "GIDI", "participant_id"]
+    }
+    
+    participant_ids[[study_name]] <- ids
+  }
+  
+  return(participant_ids)
+}
+  
+get_participant_ids_for_two(dat = dat,study_names)
+
 
 # ---------------------------------------------------------------------------- #
 # Filter all data ----
@@ -1210,6 +1267,64 @@ filter_all_data <- function(dat, study_name) {
 # Run function
 
 dat <- filter_all_data(dat, study_name)
+
+#############################TEST########################
+
+filter_data <- function(irrelevant_tbls,screening_tbls,official_enroll_dates, participant_ids){
+  dat <- dat[!(names(dat) %in% irrelevant_tbls)]
+  output <- vector("list", length(dat))
+  for (i in 1:length(dat)) {
+    if (names(dat[i]) %in% screening_tbls) {
+      if (!is.na(official_enroll_dates$close)) {
+        output[[i]] <- 
+          dat[[i]][(dat[[i]][, "session_only"] == "Eligibility" &
+                      dat[[i]][, "date_as_POSIXct"] >= official_enroll_dates$open &
+                      dat[[i]][, "date_as_POSIXct"] <= official_enroll_dates$close) |
+                     dat[[i]][, "participant_id"] %in% participant_ids, ]
+      } else if (is.na(official_enroll_dates$close)) {
+        output[[i]] <- 
+          dat[[i]][(dat[[i]][, "session_only"] == "Eligibility" &
+                      dat[[i]][, "date_as_POSIXct"] >= official_enroll_dates$open) |
+                     dat[[i]][, "participant_id"] %in% participant_ids, ]
+      }
+    } else if ("participant_id" %in% names(dat[[i]])) {
+      output[[i]] <- dat[[i]][dat[[i]][, "participant_id"] %in% participant_ids, ]
+    } else {
+      output[[i]] <- dat[[i]]
+    }
+  }
+  
+  names(output) <- names(dat)
+  return(output)
+}
+
+filter_all_data <- function(dat, study_names) {
+  official_enroll_dates <- get_enroll_dates_for_two(study_names)
+  participant_ids <- get_participant_ids_for_two(dat, study_names)
+  
+  output <- list()
+  if ("Calm" %in% study_names) {
+    screening_tbls_calm <- "dass21_as"
+    irrelevant_tbls_calm <- "gidi"
+    output1<-filter_data(irrelevant_tbls_calm,screening_tbls_calm,official_enroll_dates$Calm,participant_ids$Calm)
+    output <- c(output, output1)
+    
+  } else if  ("TET" %in% study_names ) {
+    screening_tbls_other <- c("dass21_as", "oa")
+    irrelevant_tbls_other <- "condition_assignment_settings"
+    output2 <- filter_data(irrelevant_tbls_other,screening_tbls_other,official_enroll_dates$TET,participant_ids$TET)
+    output <- c(output, output2)
+    }
+  else if  ("GIDI" %in% study_names ) {
+    screening_tbls_other <- c("dass21_as", "oa")
+    irrelevant_tbls_other <- "condition_assignment_settings"
+    output3 <- filter_data(irrelevant_tbls_other,screening_tbls_other,official_enroll_dates$GIDI,participant_ids$GIDI)
+    output <- c(output, output3)
+    }
+return(output)
+}
+
+dat_test <- filter_all_data(dat, c('GIDI'))
 
 # Note: Warnings "In check_tzones(e1, e2) : 'tzone' attributes are inconsistent" 
 # are expected and OK because timezone was specified as "America/New_York" for 

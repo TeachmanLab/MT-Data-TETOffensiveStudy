@@ -42,7 +42,7 @@ wd_dir <- getwd()
 
 # Load custom functions
 
-source("./code/2_define_functions.R")
+source("./datacleaning/code/2_define_functions.R")
 
 # Check correct R version, load groundhog package, and specify groundhog_day
 
@@ -56,12 +56,12 @@ groundhog_day <- version_control()
 
 # Obtain file names of raw CSV data files
 
-raw_data_dir <- paste0(wd_dir, "/data/1_raw_full")
+raw_data_dir <- paste0(wd_dir, "/datacleaning/data/1_raw")
 filenames <- list.files(raw_data_dir, pattern = "*.csv", full.names = FALSE)
 
 # Import data files into list
 
-dat <- lapply(paste0(raw_data_dir, "/", filenames), read.csv)
+dat <- lapply(paste0(raw_data_dir, "/", filenames), read.csv) ## 67 files for now
 
 # Name data tables in list
 
@@ -227,7 +227,7 @@ nrow(remaining) == 0
 # ---------------------------------------------------------------------------- #
 
 dat$angular_training$button_pressed[dat$angular_training$trial_type == "FillInBlank"] <- 
-  "REDACTED_BY_CLEANING_SCRIPT"
+  "REDACTED_BY_CLEANING_SCRIPT" 
 
 # ---------------------------------------------------------------------------- #
 # Redact columns in other tables ----
@@ -304,7 +304,7 @@ redact_columns <- function(dat, redact_cols) {
 
 # Run function
 
-dat <- redact_columns(dat, redact_cols)
+dat <- redact_columns(dat, redact_cols) ## 67 tables
 
 # ---------------------------------------------------------------------------- #
 # Redact "order_id" data from "gift_log" and "import_log" ----
@@ -372,7 +372,7 @@ temp2 <- dat$sms_log[dat$sms_log$exception != "" &
                        !(dat$sms_log$exception %in% c(ignored_values, 
                                                       deidentified_values)), ]
 temp2 <- temp2[order(temp2$exception), ]
-nrow(temp2) == 0
+nrow(temp2) == 0 ##false
 
 # ---------------------------------------------------------------------------- #
 # List tables that have been redacted ----
@@ -404,12 +404,12 @@ redacted_filenames <- paste0(redacted_filename_stems, "-redacted.csv")
 
 # Write redacted CSV files. Remember not to share corresponding raw data files.
 
-dir.create("./data/2_redacted")
+dir.create("./datacleaning/data/2_redacted")
 
 dat_red <- dat[names(dat) %in% redacted_tbls]
 
 for (i in 1:length(dat_red)) {
   write.csv(dat_red[[i]], 
-            paste0("./data/2_redacted/", redacted_filenames[i]),
+            paste0("./datacleaning/data/2_redacted/", redacted_filenames[i]),
             row.names = FALSE)
 }
