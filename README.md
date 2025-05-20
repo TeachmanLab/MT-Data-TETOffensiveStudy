@@ -17,7 +17,7 @@ For questions, please contact [Kaitlyn Petz](kdp8y@virginia.edu).
 
 ## Data Cleaning
 ### Data on Open Science Framework
-Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study](https://osf.io/xfn3k/) (which includes GIDI substudy data) and [MindTrails GIDI Study](https://osf.io/47ws2/) (which is restricted to GIDI substudy data) projects on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in both OSF projects. The projects have two components, with different permissions: a Private Component and a Public Component.
+Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study](https://osf.io/xfn3k/) (which includes both full TET and GIDI substudy data) project on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in the OSF project. The project has two components, with different permissions: a Private Component and a Public Component.
 
 ### Private Component
 The Private Component contains the full set of 67 raw data tables (with some exceptions) for TET and GIDI dumped from the "calm" SQL database on the "teachmanlab" Data Server on October 4, 2023 (using the steps outlined in the document titled “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull.pdf” on the Private Component of the OSF page. (this Google document will be a PDF on the OSF but im keeping the link here for now for you jwe4ec@virginia.edu) 
