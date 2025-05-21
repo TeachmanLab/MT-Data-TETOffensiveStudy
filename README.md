@@ -6,7 +6,7 @@ This repository is the knowledge base for the MindTrails TET Offensive Study (TE
 
 If you are a researcher who wants to contribute to this project, please contact Bethany Teachman at bteachman@virginia.edu. Thanks!
 
-## README Authors: Jeremy W. Eberle, Kaitlyn Petz, & Maria “Max” Larrazabal
+## README Authors: Jeremy W. Eberle, Kaitlyn Petz, & Max Larrazabal
 
 This README describes centralized data cleaning for the [MindTrails Project](https://mindtrails.virginia.edu/) Testing Engagement and Transfer (TET) study, an NIMH-funded ([R01MH113752](https://reporter.nih.gov/project-details/9513058)) randomized controlled trial of web-based interpretation bias training for anxious adults (enrollment started 4/2/2020, and enrollment and data collection ended on 2/7/2025 when the MindTrails servers were shut down, stopping any participants from signing into the program). **Importantly, we only have reliably protected and cleaned data up to October 4, 2023 (N = ~3500), the last time the data was pulled from the server before things started shutting down.** We have most data from November 2023-February 2025, but it is not formatted or cleaned the same as the data up to Oct. 2023, so we caution researchers to carefully review and clean this data before combining it with the data up to Oct. 2023 if using. The primary goal of TET is to compare the effectiveness of four different versions of CBM-I in reducing interpretation bias and anxiety, with psychoeducation as an active comparator. The study includes an eligibility screening, pretreatment assessment, five sessions of training and assessment, and a 2-month follow-up assessment.
 
