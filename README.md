@@ -85,7 +85,7 @@ If you have access to the full raw data (from the Private Component), you can re
 |   ├── 1_raw_qualtrics   	     # 2 CSV files with GIDI-UP data
 |   ├── (2_redacted)             # Folder with 14 CSV files will be created by "3_redact_data.R"
 |   └── (3_intermediate_clean)   # Folder with 51 CSV files will be created by "4_clean_data.R"
-└── (docs)
+├── (docs)
 |   └── (data_filenames.txt)     # Names of CSV files cleaning scripts are based on
 └── ...
 ```
