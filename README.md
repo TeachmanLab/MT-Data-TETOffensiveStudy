@@ -31,13 +31,13 @@ The exceptions are that only redacted versions of "gift_log", "import_log", and 
 ```
 .
 ├── data
-├── ├── 1_raw_full               # 67 CSV files (e.g., "dass21_as-04_10_2023.csv", "angular_training-04_10_2023.csv", 
-                                 #   "gift_log-04_10_2023-redacted.csv")
-├── ├── 1_raw_qualtrics       	   # 2 CSV files with GIDI-UP data
-├── materials
-├── ├── data server # “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull
-├── ├──appendices               # Appendices
-└── └── codebooks                # Codebooks
+|   ├── 1_raw_full               # 67 CSV files (e.g., "dass21_as-04_10_2023.csv", "angular_training-04_10_2023.csv", 
+|   |                            #   "gift_log-04_10_2023-redacted.csv")
+|   └── 1_raw_qualtrics       	 # 2 CSV files with GIDI-UP data
+└── materials
+    ├── data server              # “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull
+    ├── appendices               # Appendices
+    └── codebooks                # Codebooks
 ```
 
 Researchers can request access to files on this component by contacting the study PI (bat5x@virginia.edu).
@@ -49,14 +49,14 @@ Note: Tables in the 1_raw_full folder of the Private Component that are not in t
 ```
 .
 ├── data                    
-├── ├── 1_raw_calm_partial       # 53 CSV files (did not need redaction; e.g., "dass21_as-04_10_2023.csv")
-├── ├── 1_raw_qualtrics   	   # 2 CSV files with GIDI-UP data
-├── ├── 2_redacted               # 14 CSV files (needed redaction; e.g., "angular_training-04_10_2023-redacted.csv", 
+|   ├── 1_raw_calm_partial       # 53 CSV files (did not need redaction; e.g., "dass21_as-04_10_2023.csv")
+|   ├── 1_raw_qualtrics   	     # 2 CSV files with GIDI-UP data
+|   ├── 2_redacted               # 14 CSV files (needed redaction; e.g., "angular_training-04_10_2023-redacted.csv", 
 │   │                            #   "gift_log-04_10_2023-redacted.csv")
-├── ├── 3_intermediate_clean     # 51 CSV files (note: 17 files were deemed irrelevant and removed during cleaning)
-├── materials
-├── ├── appendices               # Appendices
-└── └── codebooks                # Codebooks
+|   └── 3_intermediate_clean     # 51 CSV files (note: 17 files were deemed irrelevant and removed during cleaning)
+└── materials
+    ├── appendices               # Appendices
+    └── codebooks                # Codebooks
 ```
 
 ### TET Data past October 2023 
@@ -66,6 +66,7 @@ The data after the pull on October 4, 2023 was not reliably stored in one place 
 
 ## Cleaning Scripts: Setup and File Relations
 The scripts in the code folder of this repository import the full raw data files, redact certain files, and clean the redacted and remaining raw files to yield intermediately clean files. The resulting files are considered only intermediately cleaned because further analysis-specific cleaning will be required for any given analysis.
+
 To run the cleaning scripts, create a parent folder (with any desired name, indicated by . below) with two subfolders: data and code. The working directory must be set to the parent folder for the scripts to import and export data correctly using relative file paths.
 
 ```
@@ -80,12 +81,12 @@ If you have access to the full raw data (from the Private Component), you can re
 ```
 .
 ├── data                    
-├── ├── 1_raw_calm_full          # 67 CSV files from Private Component
-├── ├── 1_raw_qualtrics   	   # 2 CSV files with GIDI-UP data
-├── ├──(2_redacted)              # Folder with 14 CSV files will be created by "3_redact_data.R"
-├── └──(3_intermediate_clean)    # Folder with 51 CSV files will be created by "4_clean_data.R"
-├── (docs)
-├── └── (data_filenames.txt)     # Names of CSV files cleaning scripts are based on
+|   ├── 1_raw_calm_full          # 67 CSV files from Private Component
+|   ├── 1_raw_qualtrics   	     # 2 CSV files with GIDI-UP data
+|   ├── (2_redacted)             # Folder with 14 CSV files will be created by "3_redact_data.R"
+|   └── (3_intermediate_clean)   # Folder with 51 CSV files will be created by "4_clean_data.R"
+└── (docs)
+|   └── (data_filenames.txt)     # Names of CSV files cleaning scripts are based on
 └── ...
 ```
 
@@ -95,28 +96,32 @@ If you have access to the partial raw data and the redacted data (from the Publi
 ```
 .
 ├── data                    
-├── ├── 1_raw_calm_partial            # 53 CSV files from Public Component
-├── ├── 1_raw_qualtrics   	   # 2 CSV files with GIDI-UP data
-├── ├──(2_redacted)              # Folder with 14 CSV files will be created by "3_redact_data.R"
-├── └──(3_intermediate_clean)    # Folder with 51 CSV files will be created by "4_clean_data.R"
+|   ├── 1_raw_calm_partial       # 53 CSV files from Public Component
+|   ├── 1_raw_qualtrics   	     # 2 CSV files with GIDI-UP data
+|   ├── (2_redacted)             # Folder with 14 CSV files will be created by "3_redact_data.R"
+|   └── (3_intermediate_clean)   # Folder with 51 CSV files will be created by "4_clean_data.R"
 ├── (docs)
-├── └── (data_filenames.txt)     # Names of CSV files cleaning scripts are based on
+|   └── (data_filenames.txt)     # Names of CSV files cleaning scripts are based on
 └── ...
 ```
 
 Put the cleaning scripts in the code subfolder. The scripts are to be run in the order listed. Assuming you already have full or partial raw data, start with 2_define_functions.R. If you have full raw data, run 3_redact_data.R next; otherwise, skip it. Run the remaining scripts.
+
 At the top of each R script, restart R (CTRL+SHIFT+F10 on Windows) and set your working directory to the parent folder (CTRL+SHIFT+H).
+
+TODO: Something seems wrong with comments next to "4_clean_data.R" in code chunk below
 
 ```
 .
 ├── ...
-├── code
-├── ├── 1_get_raw_data.ipynb     # Dump 67 CSV files from "calm" SQL database on Data Server (for "1_raw_calm_full")
-├── ├── 2_define_functions.R     # Define functions for use by subsequent R scripts
-├── ├── 3_redact_data.R          # Redact 14 CSV files from "1_raw_full" and output them to "2_redacted"
-├── ├── 4_clean_data.R           # Clean 14 CSV files from "2_redacted", 2 CSV files from “1_raw_qualtrics”, and 53 CSV files from "1_raw_calm_full"
-│   │                            #   or "1_raw_calm_partial" and output 51 CSV files to "3_intermediate_clean"
-└── └── 5_import_clean_data.R    # Import 51 CSV files from "3_intermediate_clean"
+└── code
+    ├── 1_get_raw_data.ipynb     # Dump 67 CSV files from "calm" SQL database on Data Server (for "1_raw_calm_full")
+    ├── 2_define_functions.R     # Define functions for use by subsequent R scripts
+    ├── 3_redact_data.R          # Redact 14 CSV files from "1_raw_full" and output them to "2_redacted"
+    ├── 4_clean_data.R           # Clean 14 CSV files from "2_redacted", 2 CSV files from “1_raw_qualtrics”, and 
+    |                            #   53 CSV files from "1_raw_calm_full" or "1_raw_calm_partial", and output 51 CSV 
+    |                            #   files to "3_intermediate_clean"
+    └── 5_import_clean_data.R    # Import 51 CSV files from "3_intermediate_clean"
 ```
 
 On a Macbook 12-inch 2017 laptop, the R scripts run in 18 min. As noted in 2_define_functions.R, packages may take longer to load the first time you load them with groundhog.library. After that, the runtimes below should apply.
