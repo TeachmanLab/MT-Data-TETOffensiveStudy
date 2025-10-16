@@ -1,4 +1,5 @@
 # MT-Data-TETOffensiveStudy
+
 README Authors: [Kaitlyn Petz][kaitlyn-gh], [Jeremy W. Eberle][jeremy-gh], & Max Larrazabal
 
 This README describes centralized data cleaning for the [MindTrails Project][mt] Testing Engagement and Transfer (TET) study, an NIMH-funded ([R01MH113752][nih-reporter-mt-r01]) randomized controlled trial of web-based interpretation bias training for anxious adults.
@@ -6,18 +7,20 @@ This README describes centralized data cleaning for the [MindTrails Project][mt]
 For questions, please contact [Kaitlyn Petz][kaitlyn-email].
 
 ## Overview and Scope
+
 ### TET Study
 TET enrollment started 4/2/2020, and enrollment and data collection ended on 2/7/2025 when the MindTrails servers were shut down, stopping any participants from signing into the program. **Importantly, we only have reliably protected and cleaned data up to 10/4/2023 (*N* = ~3,500), the last time the data was pulled from the server before things started shutting down.** We have most data from November 2023 to February 2025, but it is not formatted or cleaned the same as the data up to October 2023, so we caution researchers to carefully review and clean this data before combining it with the data up to October 2023 if using.
 
 The primary goal of TET is to compare the effectiveness of four different versions of CBM-I in reducing interpretation bias and anxiety, with psychoeducation as an active comparator. The study includes an eligibility screening, pretreatment assessment, five sessions of training and assessment, and a 2-month follow-up assessment.
 
 ### GIDI and GIDI-UP Substudies
-The data cleaning also encompasses data collected for GIDI (named after the [Global Infectious Disease Institute][gidi-about], a substudy of TET funded by a GIDI Rapid Response Grant in which TET participants who completed the first session’s training and assessment between July and December 2020 were invited to complete a 6-month follow-up assessment. Enrollment in GIDI was open from 7/10/2020 through 12/12/2020, and data collection ended on 10/12/2021. This data cleaning also encompasses data collected for GIDI-UP, a 12-month follow-up assessment distributed to all 609 participants enrolled in GIDI, funded by the GIDI-UP Summer Research Award. Data collection for this 12-month follow-up opened on 11/30/2022 and closed on 12/2/2023 (three months after the Qualtrics survey was made available to all participants). 
+The data cleaning also encompasses data collected for GIDI (named after the [Global Infectious Disease Institute][gidi-about]), a substudy of TET funded by a GIDI Rapid Response Grant in which TET participants who completed the first session’s training and assessment between July and December 2020 were invited to complete a 6-month follow-up assessment. Enrollment in GIDI was open from 7/10/2020 through 12/12/2020, and data collection ended on 10/12/2021. This data cleaning also encompasses data collected for GIDI-UP, a 12-month follow-up assessment distributed to all 609 participants enrolled in GIDI, funded by the GIDI-UP Summer Research Award. Data collection for this 12-month follow-up opened on 11/30/2022 and closed on 12/2/2023 (three months after the Qualtrics survey was made available to all participants). 
 
 ### Approach
 This README and the associated cleaning scripts were adapted from the [MindTrails Calm Thinking study][ct-repo] README and scripts (v1.0.1) authored by Jeremy W. Eberle ([Eberle et al., 2022][eberle-et-al-2022]). The Calm Thinking study and the TET/GIDI studies’ data are structured identically (they are stored in the same database), and much of the cleaning code written for Calm Thinking also applies to the TET/GIDI data. Thus, the README and cleaning scripts are similar to those for the Calm Thinking study, but include extra pieces relevant for TET/GIDI. We ran the Calm Thinking scripts on TET/GIDI data and implemented checks to confirm that all cleaning still occurred successfully.
 
 ## Data Cleaning
+
 ### Data on Open Science Framework
 Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study][tet-osf] (which includes both full TET and GIDI substudy data) project on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in the OSF project. The project has two components, with different permissions: a Private Component and a Public Component.
 
@@ -44,6 +47,7 @@ Researchers can request access to files on this component by contacting [Bethany
 
 ### Public Component
 The Public Component contains a partial set of raw data tables (i.e., those obtained from the calm database using the instructions outlined in the Private Component section above that did not need redaction), redacted tables (from 3_redact_data.R), and intermediately clean tables for both TET and GIDI on the TET OSF project, and just GIDI on the GIDI OSF project (from 4_clean_data.R). It also contains the 2 GIDI-UP data tables required for cleaning. The structure of a version's ZIP file is below.
+
 Note: Tables in the 1_raw_full folder of the Private Component that are not in the 1_raw_partial folder of this Public Component contain free-text responses that may or may not have identifiers. In the Public Component, redacted versions of such tables are in 2_redacted.
 
 ```
@@ -65,6 +69,7 @@ The data after the pull on October 4, 2023 was not reliably stored in one place 
 **The rest of the README contains information solely on data cleaning of the data up until the October 4, 2023 data pull. No data cleaning besides innate cleaning in the downloading process has been performed on data past October 2023.**
 
 ## Cleaning Scripts: Setup and File Relations
+
 The scripts in the code folder of this repository import the full raw data files, redact certain files, and clean the redacted and remaining raw files to yield intermediately clean files. The resulting files are considered only intermediately cleaned because further analysis-specific cleaning will be required for any given analysis.
 
 To run the cleaning scripts, create a parent folder (with any desired name, indicated by . below) with two subfolders: data and code. The working directory must be set to the parent folder for the scripts to import and export data correctly using relative file paths.
@@ -76,6 +81,7 @@ To run the cleaning scripts, create a parent folder (with any desired name, indi
 ```
 
 If you have access to the full raw data (from the Private Component), you can reproduce the redaction. You will have 2 folders with raw data files, 1 called “1_raw_calm_full” with the full raw data from the calm server, and 1 called “1_raw_qualtrics” with the full raw data from Qualtrics for the GIDI-UP study. When you run the scripts, 3_redact_data.R will create 2_redacted and files therein, and 4_clean_data.R will create 3_intermediate_clean and files therein.
+
 4_clean_data.R will also create docs containing data_filenames.txt, which documents the names of data files the cleaning scripts are based on.
 
 ```
@@ -91,6 +97,7 @@ If you have access to the full raw data (from the Private Component), you can re
 ```
 
 If you have access to the partial raw data and the redacted data (from the Public Component), you will have 2 folders with raw data files – 1 called “1_raw_calm_full” with the partial raw data from the calm server, and 1 called “1_raw_qualtrics” with the full raw data from Qualtrics for the GIDI-UP study – and 1 folder with the redacted data files called “2_redacted”. When you run the scripts, 4_clean_data.R will create 3_intermediate_clean and files therein.
+
 4_clean_data.R will also create docs containing data_filenames.txt, which documents the names of data files the cleaning scripts are based on.
 
 ```
@@ -123,20 +130,24 @@ At the top of each R script, restart R (CTRL+SHIFT+F10 on Windows) and set your 
 ```
 
 On a Macbook 12-inch 2017 laptop, the R scripts run in 18 min. As noted in 2_define_functions.R, packages may take longer to load the first time you load them with groundhog.library. After that, the runtimes below should apply.
-* 3_redact_data.R = 4 min
-* 4_clean_data.R = 13 min
-* 5_import_clean_data.R = 1 min
+
+- 3_redact_data.R = 4 min
+- 4_clean_data.R = 13 min
+- 5_import_clean_data.R = 1 min
 
 ## Cleaning Scripts: Functionality
+
 ### 1_get_raw_data.ipynb
 This Jupyter Notebook script (author: [Sonia Baee][sonia-gh]) dumps the full set of 67 raw CSV files from the "calm" SQL database on the "teachmanlab" Data Server as of the date of the last data pull (which is 10/4/2023) when used with the steps outlined in the document titled “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull.pdf” on the Private Component of the OSF page. 
 
 ### 2_define_functions.R
 This R script defines functions for use by subsequent R scripts, which source this file at the top of each script.
+
 Version control for R scripts is achieved by checking that the R version used to write the scripts ("R version 4.2.3 (2023-3-15)") matches the user's R version and by defining dates for meta.groundhog and groundhog_day, which are used by the groundhog package to load the versions of R packages that were used to write the scripts. See script for details.
 
 ### 3_redact_data.R
 This R script performs the following functions. Here, redact means to replace relevant values with "REDACTED_BY_CLEANING_SCRIPT", retaining the structure of the raw data files.
+
 - Specify columns to retain that were considered for redaction
 - Determine which "button_pressed" data in "angular_training" table to redact
 - Redact "button_pressed" data for "FillInBlank" rows in "angular_training" table
@@ -153,6 +164,7 @@ After documenting names of data files the cleaning scripts are based on, this R 
 
 #### Part I. Database-Wide Data Cleaning
 Part I applies to data for all three studies (Calm Thinking, TET, GIDI) in the "calm" SQL database.
+
 - Recode binary variables
 - Remove irrelevant tables
 - Rename "id" columns in "participant" and "study" tables
@@ -174,12 +186,14 @@ Part I applies to data for all three studies (Calm Thinking, TET, GIDI) in the "
 
 #### Part II. Filter Data for Desired Study
 Part II filters data for the specific study of interest; the "study_name" can be changed to filter data for TET, GIDI, or both TET and GIDI studies if desired. (Because GIDI is a substudy of the TET parent trial, most analyses of TET data should include both TET and GIDI data to retain all participants randomly assigned to condition in TET.)
+
 - Define enrollment period and participant_ids (see Enrollment Period for details)
   - Note: This will now be marked as October 4, 2023, the date of the last reliable TET data pull, as no data past this date will exist in the reliable dataset and these scripts should likely not be run on the data collected past October 2023. 
 - Filter all data
 
 #### Part III: TET/GIDI Study-Specific Data Cleaning
-Part III cleans the TET and GIDI data. 
+Part III cleans the TET and GIDI data.
+
 - Note lack of data for some tables 
 - Recode "coronavirus" column of "anxiety_triggers" table 
 - Exclude participants from other studies
@@ -227,6 +241,7 @@ This R script imports the intermediately cleaned TET and/or GIDI study data and 
 
 #### Further Cleaning and Analysis Considerations
 This section highlights some considerations prompted by data cleaning that may be relevant to further cleaning or to analysis. Refer to the actual script for more details.
+
 For Calm Thinking Study, TET Study, and GIDI Substudy
 
 #### Participant Indexing
@@ -237,9 +252,10 @@ Part I of 4_clean_data.R creates "system_date_time_earliest" and "system_date_ti
 
 #### Session-Related Columns
 Part I of 4_clean_data.R reveals that in some tables from the “calm” database (e.g., "dass21_as") "session" conflates time point with other information (e.g., eligibility status). Here, "session" is renamed to reflect the information it contains (e.g., "session_and_eligibility_status"), and "session_only" is created to reflect only the time point. In some tables (i.e., "angular_training", "gift_log") it is unclear how to extract the time point, so these tables lack "session_only". In tables where "session" does not conflate time point with other information, "session" is renamed "session_only".
-Thus, "session_only" is the preferred column for filtering by time point, but not all tables have it. Moreover, "session_only" includes values of "COMPLETE" in some tables (i.e., "action_log", "email_log") but not others (i.e., "task_log"). The GIDI-UP table also lacks “session_only”. Thus, filter by time point with care.
-Repeated Column Names
 
+Thus, "session_only" is the preferred column for filtering by time point, but not all tables have it. Moreover, "session_only" includes values of "COMPLETE" in some tables (i.e., "action_log", "email_log") but not others (i.e., "task_log"). The GIDI-UP table also lacks “session_only”. Thus, filter by time point with care.
+
+#### Repeated Column Names
 Part I of 4_clean_data.R reveals that although some tables from the “calm” database contain the same column name, the meanings of the columns differ. As a result, care must be taken when comparing columns between tables. See the cleaning script for explanations of repeated column names.
 
 #### Study Extensions
@@ -253,6 +269,7 @@ Enrollment periods are used to filter screening data, most of which is not index
 Note: Once TET enrollment closes, an “official_enroll_close_date” timestamp will need to be added to this section. 
 
 #### For TET Study and GIDI Substudy
+
 #### "active" Column
 Part III of 4_clean_data.R indicates that for "active" in "participant" table, some participants are mislabeled as active when they are inactive, or inactive when they are active. The "active" column may have affected final reminder emails or notices of account closure. Thus, the mislabeled data are retained to reflect potential unexpected behavior of the site for these participants.
 
@@ -264,6 +281,7 @@ Part III of 4_clean_data.R reveals various cases of unexpected values for "condi
 
 #### Multiple Screening Attempts
 After removing nonmeaningful duplicates (i.e., for duplicated values on every column in table except "X" and "id", keep last row after sorting by "id") for all tables, Part III of 4_clean_data.R first corrects cases where "participant_id" is not linked to all screening attempts by its corresponding "session_id" in "dass21_as" or “oa” tables.
+
 Second, the script removes duplicates on DASS-21-AS items, "over18", and "time_on_page" columns in "dass21_as" table and on OASIS items and the “time_on_page” column in “oa” table for a given "session_id" and "session_only" time point by keeping the last row after sorting by "session_id", "session_only", and "id". The idea is that duplicates on these columns do not reflect unique screening attempts.
 
 Third, the script counts the number of multiple screening attempts remaining for each "session_id" at screening ("n_eligibility_rows") and computes the mean "time_on_page" across those rows for each "session_id". This "time_on_page_mean" is used for analysis. It represents the mean time a given "session_id" spent on the page across their screening attempts, which could reflect different responses on DASS-21-AS or OASIS items, different responses on "over18", or both.
@@ -311,7 +329,9 @@ Given that "X" (row name in "calm" SQL database on "teachmanlab" Data Server) is
 
 #### Next Steps
 As noted above, this centralized cleaning of TET/GIDI data yields data deemed intermediately cleaned because further cleaning will be needed for any given analysis. We focused on issues that cut across multiple tables or that will affect almost any analysis. And in many cases, we opted to flag issues for further cleaning and analysis rather than implement decisions suitable for only a narrow application.
+
 Here are some known next steps for further cleaning and analysis:
+
 - Use 5_import_clean_data.R as a starting point for further cleaning and analysis
 - Further clean GIDI-UP 12-month data
 - Review the following items and conduct further cleaning as needed for your analysis
@@ -324,15 +344,18 @@ Here are some known next steps for further cleaning and analysis:
 - Appropriately handle missing data (see outtakes_create_reports.R for details)
 
 ## Resources
+
 ### Appendices and Codebooks
 Several appendices and codebooks for the TET/GIDI studies are on the Public Component.
 
 ### MindTrails Changes and Issues Log
-This is a log of site changes, data issues, etc., tagged by study that is privately stored by the MindTrails team. In July 2023, we lost most Changes and Issues Log data prior to this time, but have since created a new log and have changes and issues logged since then. If you address an issue for a specific analysis, please note in the log how you addressed it and provide a link to your code. 
+This is a log of site changes, data issues, etc., tagged by study that is privately stored by the MindTrails team. In July 2023, we lost most Changes and Issues Log data prior to this time, but have since created a new log and have changes and issues logged since then. If you address an issue for a specific analysis, please note in the log how you addressed it and provide a link to your code.
+
 Researchers can request access to relevant information from the log by contacting [Bethany Teachman][bethany-email].
 
 ### MindTrails Wiki
 This is a wiki with MindTrails project-wide and study-specific information that is privately stored by the study team.
+
 Researchers can request access to relevant information from the wiki by contacting [Bethany Teachman][bethany-email].
 
 ### Data Integrity Files
