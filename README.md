@@ -327,7 +327,7 @@ If multiple unique rows are present (`n_unq_item_rows` > 1), we compute column m
 ### Table Sorting
 Given that `X` (row name in `calm` SQL database on `teachmanlab` Data Server) is in every table and uniquely identifies every row, whereas `id`, though in every table, does not distinguish all rows, all tables from `calm` database are sorted on `X` before export.
 
-### Next Steps
+## Next Steps
 As noted above, this centralized cleaning of TET/GIDI data yields data deemed intermediately cleaned because further cleaning will be needed for any given analysis. We focused on issues that cut across multiple tables or that will affect almost any analysis. And in many cases, we opted to flag issues for further cleaning and analysis rather than implement decisions suitable for only a narrow application.
 
 Here are some known next steps for further cleaning and analysis:
@@ -335,6 +335,7 @@ Here are some known next steps for further cleaning and analysis:
 - Use `5_import_clean_data.R` as a starting point for further cleaning and analysis
 - Further clean GIDI-UP 12-month data
 - Review the following items and conduct further cleaning as needed for your analysis
+  - [Further Cleaning and Analysis Considerations](#further-cleaning-and-analysis-considerations) above
   - [MindTrails Changes and Issues Log](#mindtrails-changes-and-issues-log) entries
 - Further consider the following issues not addressed by centralized cleaning
   - Exclude participants indicated by `exclude_analysis` in `dass21_as`, `oa`, and `participant` tables
