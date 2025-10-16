@@ -19,9 +19,8 @@ The data cleaning also encompasses data collected for GIDI (named after the [Glo
 ### Approach
 This README and the associated cleaning scripts were adapted from the [MindTrails Calm Thinking study][ct-repo] README and scripts (v1.0.1) authored by Jeremy W. Eberle ([Eberle et al., 2022][eberle-et-al-2022]). The Calm Thinking study and the TET/GIDI studies’ data are structured identically (they are stored in the same database), and much of the cleaning code written for Calm Thinking also applies to the TET/GIDI data. Thus, the README and cleaning scripts are similar to those for the Calm Thinking study, but include extra pieces relevant for TET/GIDI. We ran the Calm Thinking scripts on TET/GIDI data and implemented checks to confirm that all cleaning still occurred successfully.
 
-## Data Cleaning
+## Data on Open Science Framework
 
-### Data on Open Science Framework
 Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study][tet-osf] (which includes both full TET and GIDI substudy data) project on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in the OSF project. The project has two components, with different permissions: a Private Component and a Public Component.
 
 ### Private Component
@@ -63,7 +62,7 @@ Note: Tables in the 1_raw_full folder of the Private Component that are not in t
     └── codebooks                # Codebooks
 ```
 
-### TET Data past October 2023 
+### TET Data Past October 2023 
 The data after the pull on October 4, 2023 was not reliably stored in one place as servers began shutting down, so it is not cleaned or organized the same as the other data files. All data past October 4, 2023 will live in its own OSF folder labeled as such. As a reminder, this data was downloaded sporadically and not cleaned using these rigorous data cleaning scripts, and so we recommend that researchers very carefully review and clean this data before using it, or only use data up to October 2023. 
 
 **The rest of the README contains information solely on data cleaning of the data up until the October 4, 2023 data pull. No data cleaning besides innate cleaning in the downloading process has been performed on data past October 2023.**
@@ -239,26 +238,25 @@ Part III cleans the TET and GIDI data.
 ### 5_import_clean_data.R
 This R script imports the intermediately cleaned TET and/or GIDI study data and converts system-generated timestamps back to POSIXct data types given that 4_clean_data.R outputs them as characters. As such, this script serves as a starting point for further cleaning and analysis.
 
-#### Further Cleaning and Analysis Considerations
+## Further Cleaning and Analysis Considerations
+
 This section highlights some considerations prompted by data cleaning that may be relevant to further cleaning or to analysis. Refer to the actual script for more details.
 
-For Calm Thinking Study, TET Study, and GIDI Substudy
-
-#### Participant Indexing
+### Participant Indexing
 Part I of 4_clean_data.R indexes all participant-specific data by "participant_id". Refer to participants by "participant_id" (not "study_id").
 Filtering on System-Generated Timestamps
 
 Part I of 4_clean_data.R creates "system_date_time_earliest" and "system_date_time_latest" in each table in the “calm” database (i.e., not for the GIDI-UP table, which stemmed from Qualtrics data) given that some tables have multiple system-generated timestamps. They are the earliest and latest timestamps for each row in the table--useful for filtering the entire dataset.
 
-#### Session-Related Columns
+### Session-Related Columns
 Part I of 4_clean_data.R reveals that in some tables from the “calm” database (e.g., "dass21_as") "session" conflates time point with other information (e.g., eligibility status). Here, "session" is renamed to reflect the information it contains (e.g., "session_and_eligibility_status"), and "session_only" is created to reflect only the time point. In some tables (i.e., "angular_training", "gift_log") it is unclear how to extract the time point, so these tables lack "session_only". In tables where "session" does not conflate time point with other information, "session" is renamed "session_only".
 
 Thus, "session_only" is the preferred column for filtering by time point, but not all tables have it. Moreover, "session_only" includes values of "COMPLETE" in some tables (i.e., "action_log", "email_log") but not others (i.e., "task_log"). The GIDI-UP table also lacks “session_only”. Thus, filter by time point with care.
 
-#### Repeated Column Names
+### Repeated Column Names
 Part I of 4_clean_data.R reveals that although some tables from the “calm” database contain the same column name, the meanings of the columns differ. As a result, care must be taken when comparing columns between tables. See the cleaning script for explanations of repeated column names.
 
-#### Study Extensions
+### Study Extensions
 Part I of 4_clean_data.R corrects the "study_extension" for participants 2004 and 2005, who are enrolled in Calm Thinking.
 Enrollment Period
 
@@ -268,18 +266,16 @@ Enrollment periods are used to filter screening data, most of which is not index
 
 Note: Once TET enrollment closes, an “official_enroll_close_date” timestamp will need to be added to this section. 
 
-#### For TET Study and GIDI Substudy
-
-#### "active" Column
+### "active" Column
 Part III of 4_clean_data.R indicates that for "active" in "participant" table, some participants are mislabeled as active when they are inactive, or inactive when they are active. The "active" column may have affected final reminder emails or notices of account closure. Thus, the mislabeled data are retained to reflect potential unexpected behavior of the site for these participants.
 
-#### Remove Participant IDs Associated With Post-Study Data 
+### Remove Participant IDs Associated With Post-Study Data 
 Part III of 4_clean_data.R describes how to remove participants who have two participant IDs due to re-enrolling in the TET study after they have completed all TET assessments . Participants in the control condition who want to try CBM-I, or CBM-I participants who want to continue CBM-I, are able to do so by requesting a new account from our tech team (we “migrate” their email address from their old participant ID to a new participant ID). Thus, we must exclude from analyses the new participant ID associated with the data after the participant’s study period. Researchers with admin access on the MindTrails site can find participants who have post-study data by searching on the user administration page for participant email addresses that have “migrated” in the email address name; the participant ID associated with this email address has the real study data for the participant. Then, search for the participant’s email address without “migrated” in the name, and the participant ID currently associated with this email address has the participant’s post-study data; thus, that is the participant ID that needs to be excluded. The MindTrails team tries to log all participants who re-enroll post-study in the Changes and Issues log to find and add participant IDs to exclude to the cleaning script easily. The script must be updated with the current set of participant IDs to exclude at the time of each data pull.
 
-#### Condition Switching
+### Condition Switching
 Part III of 4_clean_data.R reveals various cases of unexpected values for "conditioning" in "angular_training". See cleaning script for details.
 
-#### Multiple Screening Attempts
+### Multiple Screening Attempts
 After removing nonmeaningful duplicates (i.e., for duplicated values on every column in table except "X" and "id", keep last row after sorting by "id") for all tables, Part III of 4_clean_data.R first corrects cases where "participant_id" is not linked to all screening attempts by its corresponding "session_id" in "dass21_as" or “oa” tables.
 
 Second, the script removes duplicates on DASS-21-AS items, "over18", and "time_on_page" columns in "dass21_as" table and on OASIS items and the “time_on_page” column in “oa” table for a given "session_id" and "session_only" time point by keeping the last row after sorting by "session_id", "session_only", and "id". The idea is that duplicates on these columns do not reflect unique screening attempts.
@@ -296,7 +292,7 @@ Sixth, this per-attempt "dass21_as_total" score is multiplied by 2 to get "dass2
 
 Finally, the script computes a per-"session_id" total DASS-21-AS and OASIS scores for analysis ("dass21_as_total_anal" and "oasis_total_anal") by taking the mean of available DASS-21-AS column means (from above; again treating values of "prefer not to answer" as NA without actually recoding them) and multiplying by 7 and taking the mean of available OASIS column means (from above; again treating values of "prefer not to answer" as NA without actually recoding them) and multiplying by 5. Given that these scores account for multiple unique rows on DASS-21-AS or OASIS items, use this as the baseline score in analysis.
 
-#### Participant Flow and Analysis Exclusions
+### Participant Flow and Analysis Exclusions
 Part III of 4_clean_data.R reports number of participants screened, enrolled, and not enrolled.
 
 For participants with multiple entries who did not enroll, the script bases the reason they did not enroll on their last entry, though recognizing that non-enrollment following each attempt could have occurred for a different reason. 
@@ -305,17 +301,17 @@ Participants with more than two unique rows on DASS-21-AS or OASIS items ("n_eli
 
 However, note that, per CONSORT, analysis exclusions still appear in participant flow diagrams until the analysis stage, where numbers excluded (with reasons) are listed. Therefore, ensure these participants are not excluded too early in your procedure for generating the flow diagram.
 
-#### Enrolled Participants Without Screening Data
+### Enrolled Participants Without Screening Data
 Part III of 4_clean_data.R finds that two participants, participant IDs 3659 and 4949, were assigned participant IDs (meaning that they enrolled in the study) but do not have any screening data. This occurs because of the way that the eligibility screening data are tied to participant IDs. If a participant keeps the screening page open and does not submit it for an extended period (e.g., 30 min), during which the browser session resets, then their screening data will not get associated with the participant ID they receive upon creating an account. This is important to note for creating participant flow diagrams, as such participants do not show up when looking just at screening numbers, but should be counted in enrollment. 
 
-#### Adding GIDI-UP Qualtrics Data
+### Adding GIDI-UP Qualtrics Data
 Part III of 4_clean_data.R imports the GIDI-UP 12-month follow-up Qualtrics data CSV file and the participant ID linking CSV file. GIDI-UP participants were given a unique ID number to enter into Qualtrics, which is different from their MindTrails participant ID. Thus, we merge these two tables so that we have a MindTrails participant ID associated with each GIDI-UP Qualtrics ID. 
 
 Then, we compute total DASS-21-AS and OASIS scores similarly to as outlined above. 
 
 Further cleaning steps will need to be taken on the GIDI-UP data for a given analysis project. 
 
-#### Unexpected Multiple Entries
+### Unexpected Multiple Entries
 After removing nonmeaningful duplicates (i.e., for duplicated values on every column in table except "X" and "id", keep last row after sorting by "id") for all tables, Part III of 4_clean_data.R checks for unexpected multiple entries for all tables except for the GIDI-UP table (e.g., multiple rows for a given "participant_id" and "session_only" time point where only one row is expected). However, it is unclear how to check for multiple entries in "angular_training" and "js_psych_trial" tables, so they are not precisely checked.
 
 Note: "task_log" does not reflect some entries in other tables ("dass21_as", "credibility"). Thus, do not rely on "task_log" to find multiple entries or reflect task completion.
@@ -324,10 +320,10 @@ Besides multiple screening attempts, multiple entries are handled by computing (
 
 If multiple unique rows are present ("n_unq_item_rows" > 1), we compute column means for all items for analysis, treating values of "prefer not to answer" as NA without actually recoding them. In the script, we report all duplicates and why there are duplicates, and suggest which entry should be removed by those working with the data (but of note we keep duplicates to allow researchers to choose the row they would like to remove for purposes of their analyses).
 
-#### Table Sorting
+### Table Sorting
 Given that "X" (row name in "calm" SQL database on "teachmanlab" Data Server) is in every table and uniquely identifies every row, whereas "id", though in every table, does not distinguish all rows, all tables from “calm” database are sorted on "X" before export.
 
-#### Next Steps
+### Next Steps
 As noted above, this centralized cleaning of TET/GIDI data yields data deemed intermediately cleaned because further cleaning will be needed for any given analysis. We focused on issues that cut across multiple tables or that will affect almost any analysis. And in many cases, we opted to flag issues for further cleaning and analysis rather than implement decisions suitable for only a narrow application.
 
 Here are some known next steps for further cleaning and analysis:
