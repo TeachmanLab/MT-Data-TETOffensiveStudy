@@ -244,8 +244,8 @@ This section highlights some considerations prompted by data cleaning that may b
 
 ### Participant Indexing
 Part I of `4_clean_data.R` indexes all participant-specific data by `participant_id`. Refer to participants by `participant_id` (not `study_id`).
-Filtering on System-Generated Timestamps
 
+### Filtering on System-Generated Timestamps
 Part I of `4_clean_data.R` creates `system_date_time_earliest` and `system_date_time_latest` in each table in the `calm` database (i.e., not for the GIDI-UP table, which stemmed from Qualtrics data) given that some tables have multiple system-generated timestamps. They are the earliest and latest timestamps for each row in the table--useful for filtering the entire dataset.
 
 ### Session-Related Columns
@@ -258,8 +258,8 @@ Part I of `4_clean_data.R` reveals that although some tables from the `calm` dat
 
 ### Study Extensions
 Part I of `4_clean_data.R` corrects the `study_extension` for participants 2004 and 2005, who are enrolled in Calm Thinking.
-Enrollment Period
 
+### Enrollment Period
 Part II of `4_clean_data.R` defines the enrollment periods for Calm Thinking, TET, and GIDI in the `America/New_York` timezone, as this is the study team's timezone. `America/New_York` is preferred to `EST` because `America/New_York` accounts for switches between `EST` and `EDT`. By contrast, system-generated timestamps are stored only in `EST` as this is how they are stored in the `calm` SQL database.
 
 Enrollment periods are used to filter screening data, most of which is not indexed by `participant_id` but required for participant flow diagrams.
@@ -270,7 +270,11 @@ Note: Once TET enrollment closes, an `official_enroll_close_date` timestamp will
 Part III of `4_clean_data.R` indicates that for `active` in `participant` table, some participants are mislabeled as active when they are inactive, or inactive when they are active. The `active` column may have affected final reminder emails or notices of account closure. Thus, the mislabeled data are retained to reflect potential unexpected behavior of the site for these participants.
 
 ### Remove Participant IDs Associated With Post-Study Data 
-Part III of `4_clean_data.R` describes how to remove participants who have two participant IDs due to re-enrolling in the TET study after they have completed all TET assessments. Participants in the control condition who want to try CBM-I, or CBM-I participants who want to continue CBM-I, are able to do so by requesting a new account from our tech team (we "migrate" their email address from their old participant ID to a new participant ID). Thus, we must exclude from analyses the new participant ID associated with the data after the participant’s study period. Researchers with admin access on the MindTrails site can find participants who have post-study data by searching on the user administration page for participant email addresses that have "migrated" in the email address name; the participant ID associated with this email address has the real study data for the participant. Then, search for the participant’s email address without "migrated" in the name, and the participant ID currently associated with this email address has the participant’s post-study data; thus, that is the participant ID that needs to be excluded. The MindTrails team tries to log all participants who re-enroll post-study in the Changes and Issues log to find and add participant IDs to exclude to the cleaning script easily. The script must be updated with the current set of participant IDs to exclude at the time of each data pull.
+Part III of `4_clean_data.R` describes how to remove participants who have two participant IDs due to re-enrolling in the TET study after they have completed all TET assessments. Participants in the control condition who want to try CBM-I, or CBM-I participants who want to continue CBM-I, are able to do so by requesting a new account from our tech team (we "migrate" their email address from their old participant ID to a new participant ID). Thus, we must exclude from analyses the new participant ID associated with the data after the participant’s study period.
+
+Researchers with admin access on the MindTrails site can find participants who have post-study data by searching on the user administration page for participant email addresses that have "migrated" in the email address name; the participant ID associated with this email address has the real study data for the participant. Then, search for the participant’s email address without "migrated" in the name, and the participant ID currently associated with this email address has the participant’s post-study data; thus, that is the participant ID that needs to be excluded.
+
+The MindTrails team tries to log all participants who re-enroll post-study in the Changes and Issues Log to find and add participant IDs to exclude to the cleaning script easily. The script must be updated with the current set of participant IDs to exclude at the time of each data pull.
 
 ### Condition Switching
 Part III of `4_clean_data.R` reveals various cases of unexpected values for `conditioning` in `angular_training`. See cleaning script for details.
@@ -331,13 +335,13 @@ Here are some known next steps for further cleaning and analysis:
 - Use `5_import_clean_data.R` as a starting point for further cleaning and analysis
 - Further clean GIDI-UP 12-month data
 - Review the following items and conduct further cleaning as needed for your analysis
-- MindTrails Changes and Issues Log entries
+  - [MindTrails Changes and Issues Log](#mindtrails-changes-and-issues-log) entries
 - Further consider the following issues not addressed by centralized cleaning
-- Exclude participants indicated by `exclude_analysis` in `dass21_as`, `oa`, and `participant` tables
-- Clean `angular_training` and `js_psych_trial` tables (see `outtakes_clean_angular_training.R` for details)
-- Handle values of `prefer not to answer` (coded as 555; see `outtakes_create_reports.R` for details)
-- Check the response ranges of each item (see `outtakes_create_reports.R` for details)
-- Appropriately handle missing data (see `outtakes_create_reports.R` for details)
+  - Exclude participants indicated by `exclude_analysis` in `dass21_as`, `oa`, and `participant` tables
+  - Clean `angular_training` and `js_psych_trial` tables (see `outtakes_clean_angular_training.R` for details)
+  - Handle values of `prefer not to answer` (coded as 555; see `outtakes_create_reports.R` for details)
+  - Check the response ranges of each item (see `outtakes_create_reports.R` for details)
+  - Appropriately handle missing data (see `outtakes_create_reports.R` for details)
 
 ## Resources
 
@@ -355,7 +359,7 @@ This is a wiki with MindTrails project-wide and study-specific information that 
 Researchers can request access to relevant information from the wiki by contacting [Bethany Teachman][bethany-email].
 
 ### Data Integrity Files
-The data_integrity folder contains files that were used to check integrity of the data during data collection pre-2023. The files were created and managed by [Sonia Baee][sonia-gh] and [Ángel Vela de la Garza Evia][angel-gh].
+The `data_integrity` folder of this repository contains files that were used to check integrity of the data during data collection pre-2023. The files were created and managed by [Sonia Baee][sonia-gh] and [Ángel Vela de la Garza Evia][angel-gh].
 
 <!-- Reference links -->
 
