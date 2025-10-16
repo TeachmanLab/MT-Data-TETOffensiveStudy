@@ -1,9 +1,9 @@
 # MT-Data-TETOffensiveStudy
-README Authors: Jeremy W. Eberle, Kaitlyn Petz, & Max Larrazabal
+README Authors: [Kaitlyn Petz][kaitlyn-gh], [Jeremy W. Eberle][jeremy-gh], & Max Larrazabal
 
-This README describes centralized data cleaning for the [MindTrails Project](https://mindtrails.virginia.edu/) Testing Engagement and Transfer (TET) study, an NIMH-funded ([R01MH113752](https://reporter.nih.gov/project-details/9513058)) randomized controlled trial of web-based interpretation bias training for anxious adults.
+This README describes centralized data cleaning for the [MindTrails Project][mt] Testing Engagement and Transfer (TET) study, an NIMH-funded ([R01MH113752][nih-reporter-mt-r01]) randomized controlled trial of web-based interpretation bias training for anxious adults.
 
-For questions, please contact [Kaitlyn Petz](kdp8y@virginia.edu).
+For questions, please contact [Kaitlyn Petz][kaitlyn-email].
 
 ## Overview and Scope
 ### TET Study
@@ -12,14 +12,14 @@ TET enrollment started 4/2/2020, and enrollment and data collection ended on 2/7
 The primary goal of TET is to compare the effectiveness of four different versions of CBM-I in reducing interpretation bias and anxiety, with psychoeducation as an active comparator. The study includes an eligibility screening, pretreatment assessment, five sessions of training and assessment, and a 2-month follow-up assessment.
 
 ### GIDI and GIDI-UP Substudies
-The data cleaning also encompasses data collected for GIDI (named after the [Global Infectious Disease Institute](https://gidi.virginia.edu/about-gidi), a substudy of TET funded by a GIDI Rapid Response Grant in which TET participants who completed the first session’s training and assessment between July and December 2020 were invited to complete a 6-month follow-up assessment. Enrollment in GIDI was open from 7/10/2020 through 12/12/2020, and data collection ended on 10/12/2021. This data cleaning also encompasses data collected for GIDI-UP, a 12-month follow-up assessment distributed to all 609 participants enrolled in GIDI, funded by the GIDI-UP Summer Research Award. Data collection for this 12-month follow-up opened on 11/30/2022 and closed on 12/2/2023 (three months after the Qualtrics survey was made available to all participants). 
+The data cleaning also encompasses data collected for GIDI (named after the [Global Infectious Disease Institute][gidi-about], a substudy of TET funded by a GIDI Rapid Response Grant in which TET participants who completed the first session’s training and assessment between July and December 2020 were invited to complete a 6-month follow-up assessment. Enrollment in GIDI was open from 7/10/2020 through 12/12/2020, and data collection ended on 10/12/2021. This data cleaning also encompasses data collected for GIDI-UP, a 12-month follow-up assessment distributed to all 609 participants enrolled in GIDI, funded by the GIDI-UP Summer Research Award. Data collection for this 12-month follow-up opened on 11/30/2022 and closed on 12/2/2023 (three months after the Qualtrics survey was made available to all participants). 
 
 ### Approach
-This README and the associated cleaning scripts were adapted from the [MindTrails Calm Thinking study](https://github.com/TeachmanLab/MT-Data-CalmThinkingStudy/blob/master/README.md) README and scripts (v1.0.1) authored by Jeremy W. Eberle ([Eberle et al., 2022](https://doi.org/10.5281/zenodo.6192907)). The Calm Thinking study and the TET/GIDI studies’ data are structured identically (they are stored in the same database), and much of the cleaning code written for Calm Thinking also applies to the TET/GIDI data. Thus, the README and cleaning scripts are similar to those for the Calm Thinking study, but include extra pieces relevant for TET/GIDI. We ran the Calm Thinking scripts on TET/GIDI data and implemented checks to confirm that all cleaning still occurred successfully.
+This README and the associated cleaning scripts were adapted from the [MindTrails Calm Thinking study][ct-repo] README and scripts (v1.0.1) authored by Jeremy W. Eberle ([Eberle et al., 2022][eberle-et-al-2022]). The Calm Thinking study and the TET/GIDI studies’ data are structured identically (they are stored in the same database), and much of the cleaning code written for Calm Thinking also applies to the TET/GIDI data. Thus, the README and cleaning scripts are similar to those for the Calm Thinking study, but include extra pieces relevant for TET/GIDI. We ran the Calm Thinking scripts on TET/GIDI data and implemented checks to confirm that all cleaning still occurred successfully.
 
 ## Data Cleaning
 ### Data on Open Science Framework
-Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study](https://osf.io/xfn3k/) (which includes both full TET and GIDI substudy data) project on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in the OSF project. The project has two components, with different permissions: a Private Component and a Public Component.
+Raw and centrally cleaned data from the "calm" SQL database are stored in the [MindTrails TET Offensive Study][tet-osf] (which includes both full TET and GIDI substudy data) project on the Open Science Framework (OSF). The additional GIDI-UP data will also be stored in the OSF project. The project has two components, with different permissions: a Private Component and a Public Component.
 
 ### Private Component
 The Private Component contains the full set of 67 raw data tables (with some exceptions) for TET and GIDI dumped from the "calm" SQL database on the "teachmanlab" Data Server on October 4, 2023 (using the steps outlined in the document titled “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull.pdf” on the Private Component of the OSF page.  
@@ -40,7 +40,7 @@ The exceptions are that only redacted versions of "gift_log", "import_log", and 
     └── codebooks                # Codebooks
 ```
 
-Researchers can request access to files on this component by contacting the study PI (bat5x@virginia.edu).
+Researchers can request access to files on this component by contacting [Bethany Teachman][bethany-email].
 
 ### Public Component
 The Public Component contains a partial set of raw data tables (i.e., those obtained from the calm database using the instructions outlined in the Private Component section above that did not need redaction), redacted tables (from 3_redact_data.R), and intermediately clean tables for both TET and GIDI on the TET OSF project, and just GIDI on the GIDI OSF project (from 4_clean_data.R). It also contains the 2 GIDI-UP data tables required for cleaning. The structure of a version's ZIP file is below.
@@ -129,7 +129,7 @@ On a Macbook 12-inch 2017 laptop, the R scripts run in 18 min. As noted in 2_def
 
 ## Cleaning Scripts: Functionality
 ### 1_get_raw_data.ipynb
-This Jupyter Notebook script (author: Sonia Baee) dumps the full set of 67 raw CSV files from the "calm" SQL database on the "teachmanlab" Data Server as of the date of the last data pull (which is 10/4/2023) when used with the steps outlined in the document titled “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull.pdf” on the Private Component of the OSF page. 
+This Jupyter Notebook script (author: [Sonia Baee][sonia-gh]) dumps the full set of 67 raw CSV files from the "calm" SQL database on the "teachmanlab" Data Server as of the date of the last data pull (which is 10/4/2023) when used with the steps outlined in the document titled “PUBLIC Instructions for MindTrails teachmanlab Server Data Pull.pdf” on the Private Component of the OSF page. 
 
 ### 2_define_functions.R
 This R script defines functions for use by subsequent R scripts, which source this file at the top of each script.
@@ -329,11 +329,26 @@ Several appendices and codebooks for the TET/GIDI studies are on the Public Comp
 
 ### MindTrails Changes and Issues Log
 This is a log of site changes, data issues, etc., tagged by study that is privately stored by the MindTrails team. In July 2023, we lost most Changes and Issues Log data prior to this time, but have since created a new log and have changes and issues logged since then. If you address an issue for a specific analysis, please note in the log how you addressed it and provide a link to your code. 
-Researchers can request access to relevant information from the log by contacting the study PI (bat5x@virginia.edu).
+Researchers can request access to relevant information from the log by contacting [Bethany Teachman][bethany-email].
 
 ### MindTrails Wiki
 This is a wiki with MindTrails project-wide and study-specific information that is privately stored by the study team.
-Researchers can request access to relevant information from the wiki by contacting the study PI (bat5x@virginia.edu).
+Researchers can request access to relevant information from the wiki by contacting [Bethany Teachman][bethany-email].
 
 ### Data Integrity Files
-The data_integrity folder contains files that were used to check integrity of the data during data collection pre-2023. The files were created and managed by Sonia Baee and Ángel Vela de la Garza Evia. 
+The data_integrity folder contains files that were used to check integrity of the data during data collection pre-2023. The files were created and managed by [Sonia Baee][sonia-gh] and [Ángel Vela de la Garza Evia][angel-gh].
+
+<!-- Reference links -->
+
+[angel-gh]: https://github.com/avel22
+[bethany-email]: mailto:bteachman@virginia.edu
+[ct-repo]: https://github.com/TeachmanLab/MT-Data-CalmThinkingStudy
+[eberle-et-al-2022]: https://doi.org/10.5281/zenodo.6192907
+[gidi-about]: https://gidi.virginia.edu/about-gidi
+[jeremy-gh]: https://github.com/jwe4ec
+[kaitlyn-gh]: https://github.com/kdp8y
+[kaitlyn-email]: mailto:kdp8y@virginia.edu
+[mt]: https://mindtrails.virginia.edu/
+[nih-reporter-mt-r01]: https://reporter.nih.gov/project-details/9513058
+[sonia-gh]: https://github.com/soniabaee
+[tet-osf]: https://osf.io/xfn3k/
