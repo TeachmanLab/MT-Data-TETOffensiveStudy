@@ -6,6 +6,16 @@ This README describes centralized data cleaning for the [MindTrails Project][mt]
 
 For questions, please contact [Kaitlyn Petz][kaitlyn-email].
 
+## Table of Contents
+
+- [Overview and Scope](#overview-and-scope)
+- [Data on Open Science Framework](#data-on-open-science-framework)
+- [Cleaning Scripts: Setup and File Relations](#cleaning-scripts-setup-and-file-relations)
+- [Cleaning Scripts: Functionality](#cleaning-scripts-functionality)
+- [Further Cleaning and Analysis Considerations](#further-cleaning-and-analysis-considerations)
+- [Next Steps](#next-steps)
+- [Resources](#resources)
+
 ## Overview and Scope
 
 ### TET Study
