@@ -109,8 +109,6 @@ Put the cleaning scripts in the code subfolder. The scripts are to be run in the
 
 At the top of each R script, restart R (CTRL+SHIFT+F10 on Windows) and set your working directory to the parent folder (CTRL+SHIFT+H).
 
-TODO: Something seems wrong with comments next to "4_clean_data.R" in code chunk below
-
 ```
 .
 ├── ...
